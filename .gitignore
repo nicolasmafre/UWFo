@@ -1,0 +1,10 @@
+__pycache__/
+.chatia/
+.git/
+.venv/
+.vscode/
+arquivado/
+env/
+*.egg-info/
+*.db
+*.pyc

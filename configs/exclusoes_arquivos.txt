@@ -1,0 +1,5 @@
+C:\Users\Public\Documents
+C:\Program Files\Veyon
+C:\Program Files (x86)\LanSchool
+C:\ProgramData\Autodesk
+C:\ProgramData\SolidWorks
