@@ -16,7 +16,7 @@ if %errorLevel% neq 0 exit /b
 :MenuPrincipal
 color CF
 cls
-echo.                    UWFo 2.0.0 (Modular)
+echo.                    UWFo 0.2.0 (Modular)
 echo ============================================================
 echo        Supervisor do Filtro de Escrita Unificado
 echo ============================================================
