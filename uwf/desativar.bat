@@ -1,21 +1,21 @@
 @echo off
+cls
+echo ============================================================
+echo        MANUTENÇÃO: DESATIVANDO FILTRO UWF
+echo ============================================================
+call "%BASE_DIR%core\logger.bat" "INFO" "Iniciando processo de desativacao" "manutencao.log"
 
-for /f %%A in (
-'PowerShell -Command "Get-Date -Format yyyyMMdd"'
-) do set DATA=%%A
+call "%BASE_DIR%manutencao\updates.bat" "ATIVAR"
 
-set LOG=%~dp0..\logs\%DATA%\desativarUWF.log
+uwfmgr filter disable >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [ERRO] Falha ao desativar UWF.
+    call "%BASE_DIR%core\logger.bat" "ERROR" "Falha ao executar uwfmgr filter disable" "erros.log"
+    pause
+    exit /b
+)
 
-echo Desativando UWF...
-
-sc config wuauserv start= demand
-sc config bits start= demand
-
-net start wuauserv
-net start bits
-
-uwfmgr filter disable
-
+call "%BASE_DIR%core\logger.bat" "SUCESSO" "UWF desativado com sucesso" "manutencao.log"
+echo.
+echo Filtro DESATIVADO! Reinicie o computador para manutencao.
 pause
-
-exit /b

@@ -1,16 +1,10 @@
 @echo off
-
 net session >nul 2>&1
-
-if %errorlevel% neq 0 (
-
- powershell -command ^
- "Start-Process '%~dp0..\uwfo.bat' -Verb RunAs"
-
- exit
-
+if %errorLevel% equ 0 (
+    call "rede\metrica.bat"
+    exit /b 0
+) else (
+    echo Solicitando privilégios de Administrador...
+    powershell -Command "Start-Process -FilePath '%BASE_DIR%uwfo.bat' -Verb RunAs"
+    exit /b 1
 )
-
-call "%~dp0..\rede\metrica.bat"
-
-exit /b

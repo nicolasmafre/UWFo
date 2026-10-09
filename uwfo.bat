@@ -1,57 +1,55 @@
 @echo off
-setlocal EnableExtensions
-
+:: uwfo.bat - Unified Write Filter Overseer (Core)
 color CF
-title UWFo
+title Gerenciador e Manutenção do UWF - Etec
 chcp 65001 >nul
+setlocal EnableDelayedExpansion
 
-call "%~dp0core\logger.bat
-call "%~dp0core\admin.bat"
+:: Define diretório base
+set "BASE_DIR=%~dp0"
+cd /d "%BASE_DIR%"
 
-REM ==========================
-REM CRIA PASTA DE LOG DO DIA
-REM ==========================
+:: Verifica Admin e configura métrica de rede dinamicamente
+call "core\admin.bat"
+if %errorLevel% neq 0 exit /b
 
-for /f %%A in (
-'PowerShell -Command "Get-Date -Format yyyyMMdd"'
-) do set DATA=%%A
-
-if not exist "%~dp0logs\%DATA%" (
-    mkdir "%~dp0logs\%DATA%"
-)
-
-REM ==========================
-
-:MENU
-
+:MenuPrincipal
+color CF
 cls
-
-echo ===================================
-echo            UWFo 1.0
-echo ===================================
+echo.                    UWFo 2.0.0 (Modular)
+echo ============================================================
+echo        Supervisor do Filtro de Escrita Unificado
+echo ============================================================
 echo.
-echo [1] Status
-echo [2] Ativar UWF
-echo [3] Desativar UWF
-echo [4] Overlay
-echo [5] Exclusoes
-echo [6] Limpeza
-echo [7] LanSchool
-echo [8] Ajuda
+echo [1] Verificar Compatibilidade e Status do Sistema
+echo [2] Menu de Proteção (Ativar Filtro para as Aulas)
+echo [3] Menu de Manutenção (Desativar Filtro e Atualizar)
+echo [4] Menu de Ajustes Avançados (Sobreposição/Overlay)
+echo [5] Sincronizar Exclusões (Aplicar configs\*.txt)
+echo [6] Diagnóstico de Rede e LanSchool
+echo [7] Executar Limpeza (Logs e Caches)
+echo [8] Reiniciar Computador
+echo ------------------------------------------------------------
 echo [0] Sair
-echo.
+echo [?] Ajuda
+echo ============================================================
+set "opcao="
+set /p opcao="Escolha uma opção: "
 
-set /p op=Escolha:
+if "%opcao%"=="1" call "core\status.bat"
+if "%opcao%"=="2" call "uwf\ativar.bat"
+if "%opcao%"=="3" call "uwf\desativar.bat"
+if "%opcao%"=="4" call "uwf\overlay.bat"
+if "%opcao%"=="5" call "uwf\exclusoes.bat" "SYNC"
+if "%opcao%"=="6" call "rede\lanschool.bat"
+if "%opcao%"=="7" call "manutencao\limpeza.bat" "MANUAL"
+if "%opcao%"=="8" goto :Reiniciar
+if "%opcao%"=="0" exit /b
+if "%opcao%"=="?" call "core\ajuda.bat"
 
-if "%op%"=="1" call "%~dp0core\status.bat"
-if "%op%"=="2" call "%~dp0uwf\ativar.bat"
-if "%op%"=="3" call "%~dp0uwf\desativar.bat"
-if "%op%"=="4" call "%~dp0uwf\overlay.bat"
-if "%op%"=="5" call "%~dp0uwf\exclusoes.bat"
-if "%op%"=="6" call "%~dp0manutencao\limpeza.bat"
-if "%op%"=="7" call "%~dp0rede\lanschool.bat"
-if "%op%"=="8" call "%~dp0core\ajuda.bat"
+goto :MenuPrincipal
 
-if "%op%"=="0" exit
-
-goto MENU
+:Reiniciar
+call "core\logger.bat" "INFO" "Requisicao de reinicio enviada pelo usuario." "uwfo.log"
+shutdown /r /t 3
+exit /b

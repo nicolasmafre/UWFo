@@ -1,37 +1,26 @@
 @echo off
-
 cls
+echo ============================================================
+echo          VERIFICAÇÃO DE STATUS UWF E SISTEMA
+echo ============================================================
+call "%BASE_DIR%core\logger.bat" "INFO" "Status do sistema consultado" "uwfo.log"
 
-echo Verificando sistema...
+echo [1/3] Edição do Windows...
+for /f "tokens=3*" %%a in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName 2^>nul') do set "WinEd=%%a %%b"
+echo Detectada: %WinEd%
 echo.
 
-for /f "tokens=3*" %%A in (
-'reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName'
-) do set "WinEd=%%A %%B"
+echo [2/3] Status do UWFMgr...
+where uwfmgr >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [ERRO] UWF NAO ESTA INSTALADO!
+    call "%BASE_DIR%core\logger.bat" "ERROR" "UWF nao detectado no sistema." "erros.log"
+    pause
+    exit /b
+)
 
-echo Windows:
-echo %WinEd%
-
-echo.
-echo UWF:
+echo [3/3] Configurações Atuais (Filtro e Overlay)...
 uwfmgr filter get-config
-
 echo.
-echo Overlay:
 uwfmgr overlay get-config
-
-echo.
-echo Exclusoes:
-uwfmgr file get-exclusions
-
-echo.
-echo Registro:
-uwfmgr registry get-exclusions
-
-echo.
-echo Rede:
-netsh interface ipv4 show interface
-
 pause
-exit /b
-``

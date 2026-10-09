@@ -1,0 +1,8 @@
+# --- Gerenciamento de Sala ---
+HKEY_LOCAL_MACHINE\SOFTWARE\Veyon Solutions
+HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\LanSchool
+
+# --- Sistema e Defender ---
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation

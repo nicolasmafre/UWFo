@@ -1,43 +1,27 @@
 @echo off
+cls
+echo ============================================================
+echo          PROTEÇÃO: PREPARANDO ATIVAÇÃO DO UWF
+echo ============================================================
+call "%BASE_DIR%core\logger.bat" "INFO" "Iniciando processo de ativacao do UWF" "ativacao.log"
 
-for /f %%A in (
-'PowerShell -Command "Get-Date -Format yyyyMMdd"'
-) do set DATA=%%A
+powercfg /HIBERNATE OFF
+call "%BASE_DIR%manutencao\updates.bat" "DESATIVAR"
+call "%BASE_DIR%manutencao\limpeza.bat" "AUTO"
+call "%BASE_DIR%uwf\overlay.bat" "AUTO"
+call "%BASE_DIR%uwf\exclusoes.bat" "SYNC"
 
-set LOG=%~dp0..\logs\%DATA%\ativarUWF.log
-
-echo Ativando UWF...
-
-call "%~dp0..\manutencao\updates.bat"
-
-call "%~dp0..\manutencao\limpeza.bat"
-
-call "%~dp0exclusoes.bat"
-
-uwfmgr volume protect c:
-
-uwfmgr overlay set-type DISK
-
-uwfmgr overlay set-size 25600
-
-uwfmgr overlay set-warningthreshold 22000
-
-uwfmgr overlay set-criticalthreshold 24500
-
-uwfmgr filter enable
-
-if errorlevel 1 (
-
- echo ERRO AO ATIVAR
-
- pause
-
- exit /b
-
+echo.
+echo Ativando o filtro...
+uwfmgr filter enable >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [ERRO] Falha ao ativar UWF.
+    call "%BASE_DIR%core\logger.bat" "ERROR" "Falha ao executar uwfmgr filter enable" "ativacao.log"
+    pause
+    exit /b
 )
 
-echo UWF habilitado.
-
+call "%BASE_DIR%core\logger.bat" "SUCESSO" "UWF programado para ativar no proximo boot" "ativacao.log"
+echo.
+echo Filtro ATIVADO! Reinicie o computador para aplicar.
 pause
-
-exit /b

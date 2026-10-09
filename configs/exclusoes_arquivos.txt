@@ -1,5 +1,34 @@
+# --- Perfis Virtuais e Android ---
+%USERPROFILE%\Documents
+%USERPROFILE%\VirtualBox VMs
+%USERPROFILE%\.VirtualBox
 C:\Users\Public\Documents
+%USERPROFILE%\.android
+%USERPROFILE%\AppData\Local\Android
+
+# --- Cache de Navegadores ---
+%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Default\Cache
+%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Default\Code Cache
+%USERPROFILE%\AppData\Local\Microsoft\Edge\User Data\Default\Cache
+%USERPROFILE%\AppData\Local\Microsoft\Edge\User Data\Default\Code Cache
+
+# --- ETEC: Desenvolvimento ---
+%USERPROFILE%\.gradle
+%USERPROFILE%\.m2
+%USERPROFILE%\AppData\Local\Google
+%USERPROFILE%\AppData\Roaming\Google
+
+# --- ETEC: Engenharia ---
+%USERPROFILE%\AppData\Local\Autodesk
+%USERPROFILE%\AppData\Roaming\Autodesk
+C:\ProgramData\Autodesk
+%USERPROFILE%\AppData\Local\SolidWorks
+%USERPROFILE%\AppData\Roaming\SolidWorks
+C:\ProgramData\SolidWorks
+
+# --- ETEC: Gerenciamento de Sala ---
 C:\Program Files\Veyon
 C:\Program Files (x86)\LanSchool
-C:\ProgramData\Autodesk
-C:\ProgramData\SolidWorks
+
+# --- Sistema ---
+C:\Windows\System32\LogFiles
