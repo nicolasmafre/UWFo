@@ -52,3 +52,6 @@ Por que esta arquitetura é profissional?
 
 3. Escalabilidade: Se precisar adicionar um módulo para limpar chaves de licença expiradas, basta criar um script na pasta `manutencao` e chamá-lo no menu.
 ```
+
+## Licença
+Este projeto está licenciado sob a [Licença MIT](LICENSE) - veja o arquivo LICENSE para detalhes.
