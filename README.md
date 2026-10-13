@@ -1,57 +1,88 @@
 # UWFo - Unified Write Filter Overseer
 
 ```text
-  _   ___      ____  ___       
- | | | \ \    / /  \/  |       
- | | | |\ \  / /| \  / | ___   
- | |_| | \ \/ / | |\/| |/ _ \  
-  \___/   \__/  |_|  |_|\___/  
-==================================
- Gerenciador Escolar de Laboratórios
-==================================
+ _   _  __        __  _____       
+| | | | \ \      / / |  ___|___  
+| | | |  \ \ /\ / /  | |_  / _ \ 
+| |_| |   \ V  V /   |  _|| (_) |
+ \___/     \_/\_/    |_|   \___/  v 1.0.0
+=========================================
+Supervisor do Filtro de Escrita Unificado
+=========================================
 ```
 
-## Visão Geral
-O **UWFo** é uma solução modular para gerenciar o _Unified Write Filter_ (UWF) no **Windows 10/11 Education e Enterprise**. Projetado especificamente para as necessidades de laboratórios de TI (Etec), ele orquestra o congelamento de disco, exclusões vitais (_LanSchool_, _Veyon_, _SolidWorks_, _Android Studio_) e garante a auditoria das ações via logs locais.
+## 📖 Visão Geral
+O UWFo é uma solução modular e de código aberto para gerir o Unified Write Filter (UWF) em ambientes educacionais e corporativos. Desenvolvido especificamente para os laboratórios de TI (como os das Etecs), ele orquestra o congelamento de discos, gere exclusões críticas (LanSchool, Veyon, SolidWorks, Android Studio, etc.) e garante a auditoria das ações através de logs locais.
 
-## Arquitetura Modular
-Em vez de um script .bat gigante, o **UWFo** agora separa Lógica de Execução e Dados de Configuração.
+## ✨ Principais Funcionalidades
+Arquitetura Modular: Separação clara entre Core, Configurações, UWF, Manutenção e Rede.
 
-`uwfo.bat`: Menu principal e orquestrador.
+Auto-Elevação Blindada: O script solicita privilégios de Administrador automaticamente sem entrar em loops.
 
-`configs\`: Contém .txt de exclusões e config.ini. Sempre edite as exclusões aqui.
+Configuração Centralizada: Nada de editar código Batch. Tamanhos de Overlay e Exclusões são geridos através de ficheiros .ini e .txt limpos.
 
-`logs\`: Registros auditáveis de quem ativou/desativou o filtro e erros do sistema.
+Diagnóstico de Rede Avançado: Módulo dedicado que vasculha placas físicas e diagnostica ativamente o status e exclusões do LanSchool.
 
-`rede\`, `manutencao\`, `uwf\`: Módulos independentes executados sob demanda.
+Auditoria Contínua: Todas as ações (ativação, limpeza, falhas) são registadas com data e hora na pasta logs/.
 
-## Como Usar
-Extraia a pasta completa **UWFo** no diretório raiz (```C:\UWFo``` - recomendado).
-
-Para adicionar uma nova pasta que não deve ser congelada, edite `configs\exclusoes_arquivos.txt`.
-
-Clique duas vezes em uwfo.bat (ele pedirá permissão de Administrador automaticamente).
-
-Utilize a Opção 2 para ativar a proteção e a Opção 3 para dias de manutenção/instalação de software.
-
-## Destaques da Versão 2.0
-**Rede Dinâmica:** A métrica de rede não foca mais apenas na interface chamada "_Ethernet_". O script vasculha via _PowerShell_ por qualquer interface física ativa, prevenindo quebras em máquinas com múltiplas placas de rede ou nomes alterados.
-
-**Diagnóstico LanSchool:** Módulo de rede específico que verifica se o processo student.exe está rodando e se suas chaves de registro estão devidamente salvas do UWF.
-
-**Segurança e Log:** Cada ação administrativa é registrada na pasta logs\.
-
+## 📂 Arquitetura do Projeto
 
 ```
-Por que esta arquitetura é profissional?
-
-
-1. Centralização de Dados (`configs/`): Quando o governo/Estado adicionar um novo software, você não precisa ler linhas de código `Batch`. Você abre o arquivo de texto `exclusoes_arquivos.txt`, coloca o caminho e salva. 
-
-2. Log Rotacional e Auditoria (`logger.bat`): Permite saber quando o filtro falhou ou quando a máquina entrou em modo de manutenção.
-
-3. Escalabilidade: Se precisar adicionar um módulo para limpar chaves de licença expiradas, basta criar um script na pasta `manutencao` e chamá-lo no menu.
+UWFo\
+│   uwfo.bat                  # Script Principal (Orquestrador)
+│   LICENSE                   # Licença MIT
+│   README.md                 # Documentação
+│
+├── configs\                  # Variáveis e Exclusões do Sistema
+│   ├── config.ini            # Tamanho e tipo do Overlay
+│   ├── exclusoes_arquivos.txt
+│   └── exclusoes_registro.txt
+│
+├── core\                     # Módulos de base
+│   ├── ajuda.bat
+│   ├── logger.bat            # Sistema de log rotacional
+│   └── status.bat            # Verificação de ambiente
+│
+├── logs\                     # Registo de auditoria (Gerados automaticamente)
+│   ├── ativacao.log
+│   ├── lanschool.log
+│   └── ...
+│
+├── manutencao\               # Tarefas do sistema operacional
+│   ├── limpeza.bat
+│   └── updates.bat
+│
+├── rede\                     # Diagnósticos e interfaces
+│   ├── lanschool.bat
+│   └── metrica.bat
+│
+└── uwf\                      # Interações diretas com o uwfmgr
+    ├── ativar.bat
+    ├── desativar.bat
+    ├── exclusoes.bat
+    └── overlay.bat
 ```
 
-## Licença
-Este projeto está licenciado sob a [Licença MIT](LICENSE) - veja o arquivo LICENSE para detalhes.
+## ⚙️ Como Instalar e Configurar
+
+1. Clone este repositório ou extraia a pasta completa no diretório raiz da máquina (ex: ```C:\UWFo```).
+
+2. Vá à pasta ```configs/``` e edite os ficheiros:
+
+    - ```config.ini```: Defina o tamanho do seu Overlay em Megabytes.
+
+    - ```exclusoes_arquivos.txt```: Adicione os caminhos das pastas que não devem ser congeladas (uma por linha). O script entende variáveis como %USERPROFILE%.
+
+3. Dê um duplo clique no ```uwfo.bat```. Ele pedirá elevação para Administrador e abrirá o menu principal.
+
+## 🚀 Como Usar no Dia a Dia
+- **Para as Aulas (Congelar)**: Utilize a _Opção 2_. O script fará uma limpeza profunda, bloqueará o Windows Update, sincronizará as suas configurações da pasta ```configs/``` e deixará a máquina pronta para ser reiniciada em modo protegido.
+
+- **Para Manutenção (Descongelar)**: Utilize a _Opção 3_. O disco será descongelado e os serviços do Windows Update voltarão a funcionar. Reinicie a máquina, instale os softwares necessários e volte a ativar o filtro usando a _Opção 2_.
+
+- **Diagnóstico**: A _Opção 6_ é extremamente útil se houver problemas na comunicação do software de gestão de sala (LanSchool), testando processos, exclusões de registro e métricas de rede.
+
+## 📝 Licença
+Este projeto está licenciado ao abrigo da **Licença MIT** - veja o ficheiro [LICENSE](LICENSE) para detalhes. Pode utilizá-lo livremente, modificá-lo e adaptá-lo às necessidades da sua instituição.
+
+Desenvolvido com foco na eficiência de laboratórios educacionais por Nícolas Martins Freitas.

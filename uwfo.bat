@@ -8,7 +8,6 @@ setlocal EnableDelayedExpansion
 :: Define diretório base absoluto e entra nele
 set "BASE_DIR=%~dp0"
 cd /d "%BASE_DIR%"
-
 :: --- ROTINA DE AUTO-ELEVAÇÃO BLINDADA ---
 :VerificarAdmin
 net session >nul 2>&1
@@ -37,7 +36,7 @@ if %errorLevel% equ 0 (
 :MenuPrincipal
 color CF
 cls
-echo.                    UWFo 0.1.0 (Modular)
+echo.                    UWFo 1.0.0
 echo ============================================================
 echo        Supervisor do Filtro de Escrita Unificado
 echo ============================================================
